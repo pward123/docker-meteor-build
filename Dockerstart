@@ -1,0 +1,62 @@
+#!/bin/bash
+
+set -e
+
+BUILD_DIR="/tmp/build"
+SRC_DIR="$(pwd)"
+DIST_DIR="${SRC_DIR}/dist"
+METEOR_PATH=/usr/local/bin/meteor
+
+#
+# Clean out any existing dist and build folders
+#
+echo "=== cleaning folders ==="
+if [ -d "${DIST_DIR}" ]
+then
+    rm -rf "${DIST_DIR}"
+fi
+mkdir -p "${DIST_DIR}"
+
+if [ -d "${BUILD_DIR}" ]
+then
+    rm -rf "${BUILD_DIR}"
+fi
+mkdir -p "${BUILD_DIR}"
+
+#
+# If there's a package.json, run npm install
+#
+if [ -f "${SRC_DIR}/package.json" ]
+then
+    echo "=== Running npm install before building ==="
+    pushd ${SRC_DIR}
+    npm install
+    popd
+fi
+
+#
+# Make a temporary folder to hold the built app and run meteor build
+#
+echo "=== building ==="
+pushd "${SRC_DIR}"
+"${METEOR_PATH}" build "${BUILD_DIR}" --directory
+popd
+
+#
+# Run npm install inside the bundle
+#
+echo "=== Running npm install inside the bundle ==="
+pushd "${BUILD_DIR}/bundle/programs/server"
+npm install
+popd
+
+#
+# Copy the finished product back to the ${SRC_DIR}/dist folder
+#
+echo "=== Copying built app to the dist folder ==="
+rsync -a "${BUILD_DIR}/bundle" "${DIST_DIR}"
+
+#
+# All done
+#
+echo "=== Complete ==="

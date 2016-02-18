@@ -1,0 +1,20 @@
+machine:
+  services:
+    - docker
+  python:
+    version: pypy-2.4.0
+
+dependencies:
+  override:
+    - docker build -t meteor-build .
+
+test:
+  override:
+    - echo "Uncomment the line below to actually test."
+    #- npm test
+
+deployment:
+  release:
+    branch: /release[\.\/_\-\w]+/
+    commands:
+      - ./circle/push_to_aws.sh
