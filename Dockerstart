@@ -3,8 +3,8 @@
 set -e
 
 BUILD_DIR="/tmp/build"
-SRC_DIR="$(pwd)"
-DIST_DIR="${SRC_DIR}/dist"
+SRC_DIR=${SRC_DIR:$(pwd)}
+DIST_DIR=${DIST_DIR:=${SRC_DIR}/dist}
 METEOR_PATH=/usr/local/bin/meteor
 
 #
