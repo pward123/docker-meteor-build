@@ -54,7 +54,7 @@ popd
 # Copy the finished product back to the ${SRC_DIR}/dist folder
 #
 echo "=== Copying built app to the dist folder ==="
-cp -a "${BUILD_DIR}/bundle" "${DIST_DIR}"
+cp -a "${BUILD_DIR}/bundle/." "${DIST_DIR}/"
 
 #
 # All done
