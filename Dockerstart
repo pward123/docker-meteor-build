@@ -11,17 +11,15 @@ METEOR_PATH=~/.meteor/meteor
 # Clean out any existing dist and build folders
 #
 echo "=== cleaning folders ==="
-if [ -d "${DIST_DIR}" ]
+if [ ! -d "${DIST_DIR}" ]
 then
-    rm -rf "${DIST_DIR}"
+    mkdir -p "${DIST_DIR}"
 fi
-mkdir -p "${DIST_DIR}"
 
-if [ -d "${BUILD_DIR}" ]
+if [ ! -d "${BUILD_DIR}" ]
 then
-    rm -rf "${BUILD_DIR}"
+    mkdir -p "${BUILD_DIR}"
 fi
-mkdir -p "${BUILD_DIR}"
 
 #
 # If there's a package.json, run npm install
@@ -29,7 +27,7 @@ mkdir -p "${BUILD_DIR}"
 if [ -f "${SRC_DIR}/package.json" ]
 then
     echo "=== Running npm install before building ==="
-    pushd ${SRC_DIR}
+    pushd ${SRC_DIR} > /dev/null
     npm install
     popd
 fi
@@ -38,7 +36,7 @@ fi
 # Make a temporary folder to hold the built app and run meteor build
 #
 echo "=== building ==="
-pushd "${SRC_DIR}"
+pushd "${SRC_DIR}" > /dev/null
 "${METEOR_PATH}" build "${BUILD_DIR}" --directory
 popd
 
@@ -46,7 +44,7 @@ popd
 # Run npm install inside the bundle
 #
 echo "=== Running npm install inside the bundle ==="
-pushd "${BUILD_DIR}/bundle/programs/server"
+pushd "${BUILD_DIR}/bundle/programs/server" > /dev/null
 npm install
 popd
 
