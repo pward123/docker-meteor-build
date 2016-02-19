@@ -5,7 +5,7 @@ set -e
 BUILD_DIR="/tmp/build"
 SRC_DIR=${SRC_DIR:=$(pwd)}
 DIST_DIR=${DIST_DIR:=${SRC_DIR}/dist}
-METEOR_PATH=/usr/local/bin/meteor
+METEOR_PATH=~/.meteor/meteor
 
 #
 # Clean out any existing dist and build folders
@@ -54,7 +54,7 @@ popd
 # Copy the finished product back to the ${SRC_DIR}/dist folder
 #
 echo "=== Copying built app to the dist folder ==="
-rsync -a "${BUILD_DIR}/bundle" "${DIST_DIR}"
+cp -a "${BUILD_DIR}/bundle" "${DIST_DIR}"
 
 #
 # All done

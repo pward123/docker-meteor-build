@@ -1,21 +1,33 @@
 #
 # Docker container that can be used to build meteor apps
-# i.e. docker run --rm -v /home/ubuntu/my-meteor-app:/app meteor-build
+# i.e. docker run --rm -v /home/ubuntu/my-meteor-app:~/app meteor-build
 #
 # When the above container terminates, the bundle will be located in /home/ubuntu/my-meteor-app/dist
 #
 FROM       node:0.10.41
 MAINTAINER Paul Ward <pward123@gmail.com>
-RUN        curl https://install.meteor.com/ | sh
 
+# Running 'meteor build' as root has major issues, so lets create a user
+# See https://github.com/meteor/meteor/issues/4566
+RUN        useradd -g root -ms /bin/bash ubuntu
+USER       ubuntu
+WORKDIR    /home/ubuntu
+
+# Add an alias for 'll'
 RUN        echo "alias ll='ls -al'" | tee ~/.bashrc
 
-# Running help downloads some initial libraries
-RUN        /usr/local/bin/meteor help
+# Install meteor
+RUN        curl https://install.meteor.com/ | sh
+
+# Make sure that docker build installs the meteor versions we're using
+RUN        ~/.meteor/meteor create --release METEOR@1.3-modules-beta.8 /tmp/testapp
+RUN        rm -rf /tmp/testapp
+RUN        ~/.meteor/meteor create --release pward123:METEOR@1.1.0.3-4 /tmp/testapp
+RUN        rm -rf /tmp/testapp
 
 # Add the dockerstart file
-ADD        Dockerstart /opt/Dockerstart
+ADD        Dockerstart /home/ubuntu/Dockerstart
 
 # Default to building the app
 WORKDIR    /app
-ENTRYPOINT ["/opt/Dockerstart"]
+ENTRYPOINT ["/home/ubuntu/Dockerstart"]
