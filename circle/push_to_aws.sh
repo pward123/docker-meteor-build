@@ -17,4 +17,4 @@ mkdir -p ${DISTRO_DIR}
 docker save ${CONTAINER}:$TAG | gzip -c > ${DISTRO_DIR}/${CONTAINER}_${TAG}.tgz
 
 # Copy the tar to AWS
-aws s3 cp ${DISTRO_DIR}/${CONTAINER}_${TAG}.tgz s3://savi-docker-images/base-images/${CONTAINER}_${TAG}.tgz
+aws s3 cp ${DISTRO_DIR}/${CONTAINER}_${TAG}.tgz ${S3_BUCKET_PATH}/${CONTAINER}_${TAG}.tgz
