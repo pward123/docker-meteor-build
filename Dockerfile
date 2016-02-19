@@ -20,7 +20,7 @@ RUN        echo "alias ll='ls -al'" | tee ~/.bashrc
 RUN        curl https://install.meteor.com/ | sh
 
 # Make sure that docker build installs the meteor versions we're using
-RUN        ~/.meteor/meteor create --release METEOR@1.3-modules-beta.11 /tmp/testapp
+RUN        ~/.meteor/meteor create --release METEOR@1.3-beta.11 /tmp/testapp
 RUN        rm -rf /tmp/testapp
 RUN        ~/.meteor/meteor create --release pward123:METEOR@1.1.0.3-4 /tmp/testapp
 RUN        rm -rf /tmp/testapp
