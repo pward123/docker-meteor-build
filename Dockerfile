@@ -4,7 +4,7 @@
 #
 # When the above container terminates, the bundle will be located in /home/ubuntu/my-meteor-app/dist
 #
-FROM       node:0.10.41
+FROM       node:0.10.43
 MAINTAINER Paul Ward <pward123@gmail.com>
 
 # Running 'meteor build' as root has major issues, so lets create a user
@@ -20,9 +20,7 @@ RUN        echo "alias ll='ls -al'" | tee ~/.bashrc
 RUN        curl https://install.meteor.com/ | sh
 
 # Make sure that docker build installs the meteor versions we're using
-RUN        ~/.meteor/meteor create --release METEOR@1.3-beta.11 /tmp/testapp
-RUN        rm -rf /tmp/testapp
-RUN        ~/.meteor/meteor create --release pward123:METEOR@1.1.0.3-4 /tmp/testapp
+RUN        ~/.meteor/meteor create --release METEOR@1.3 /tmp/testapp
 RUN        rm -rf /tmp/testapp
 
 # Add the dockerstart file
